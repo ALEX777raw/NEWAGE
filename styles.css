@@ -948,7 +948,7 @@ h1, h2 {
     }
 
     .riso-text .char {
-        font-size: clamp(2rem, 12vw, 8rem);
+        font-size: clamp(1.5rem, 8vw, 4rem);
         filter: none !important;
     }
 
@@ -1111,6 +1111,7 @@ h1, h2 {
     }
 
     .riso-text .char {
+        font-size: clamp(1.2rem, 6vw, 3rem);
         filter: none !important;
         -webkit-filter: none !important;
         text-shadow: none !important;
