@@ -949,27 +949,37 @@ h1, h2 {
 
     .riso-text .char {
         font-size: clamp(2rem, 12vw, 8rem);
+        filter: none !important;
+    }
+
+    .riso-text {
+        filter: none !important;
     }
 
     /* Lusion Button Mobile */
     .lusion-btn {
-        padding: 25px 40px;
-        border-radius: 15px;
+        padding: 20px 30px;
+        border-radius: 12px;
     }
 
     .label-main {
-        font-size: clamp(1.2rem, 4vw, 2rem);
-        letter-spacing: 0.1em;
+        font-size: clamp(1rem, 3.5vw, 1.5rem);
+        letter-spacing: 0.08em;
     }
 
     .label-mono {
-        font-size: 0.65rem;
-        letter-spacing: 0.1em;
+        font-size: 0.55rem;
+        letter-spacing: 0.08em;
     }
 
     .btn-links {
         flex-direction: column;
-        gap: 5px;
+        gap: 8px;
+    }
+
+    .btn-link {
+        padding: 4px 12px;
+        font-size: 0.6rem;
     }
 
     /* Hide heavy backgrounds on mobile for performance */
@@ -1090,6 +1100,49 @@ h1, h2 {
     }
 
     .sun-core {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Fix blurry riso-text on mobile */
+    .riso-text {
+        filter: none !important;
+        -webkit-filter: none !important;
+    }
+
+    .riso-text .char {
+        filter: none !important;
+        -webkit-filter: none !important;
+        text-shadow: none !important;
+    }
+
+    /* Smaller Telegram button on mobile */
+    .lusion-btn {
+        padding: 20px 30px;
+        border-radius: 12px;
+    }
+
+    .label-main {
+        font-size: clamp(1rem, 4vw, 1.5rem);
+        letter-spacing: 0.08em;
+    }
+
+    .label-mono {
+        font-size: 0.6rem;
+    }
+
+    .btn-links {
+        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-link {
+        padding: 4px 12px;
+        font-size: 0.55rem;
+    }
+
+    .viscous-blob {
         width: 80px;
         height: 80px;
     }

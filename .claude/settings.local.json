@@ -6,7 +6,10 @@
       "Bash(del \"c:\\\\Users\\\\lesa5\\\\Downloads\\\\визитка\\\\rocket.js\")",
       "Bash(git init:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nSEYATEL Portfolio - Creative Developer Site\n\nFeatures:\n- Animated portfolio slides with unique backgrounds\n- MEDUZIA: underwater bubbles effect\n- YANIS: sky with sun and clouds\n- ORBITAL: Mars particles animation\n- GEOCYPH: matrix filaments network\n- PROTOCOL: camera lens with iris tracking\n- ЛЕКМАН: blueprint/cyanotype grid\n- Viscous background for final Telegram section\n- Responsive design for mobile devices\n- Hidden scrollbar for clean UI\n- Telegram contacts: @seyatel_tg, @Jysson\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
     ]
   }
 }
