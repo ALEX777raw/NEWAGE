@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEYATEL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <svg class="pulp-svg">
+        <defs>
+            <filter id="pulp-distort">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
+            </filter>
+
+            <filter id="grain">
+                <feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="2" stitchTiles="stitch"/>
+                <feColorMatrix type="saturate" values="0"/>
+            </filter>
+
+            <filter id="elasticDistortion">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.001" numOctaves="2" result="noise" seed="2" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" id="displacement-map" />
+            </filter>
+
+            <filter id="fluid-filter">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+
+            <filter id="liquid-filter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" seed="2">
+                    <animate attributeName="baseFrequency" dur="30s" values="0.01;0.015;0.01" repeatCount="indefinite" />
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" scale="30" />
+            </filter>
+        </defs>
+    </svg>
+
+
+    <div class="ui-decoration">
+        [ СИСТЕМА: ВИЗУАЛЬНЫЙ_СИНТЕЗ_V1.04 ]<br>
+        МАТЕРИАЛ: ОРГАНИЧЕСКОЕ_ВОЛОКНО
+    </div>
+
+    <div class="superposition-trigger" id="glow"></div>
+
+    <div class="scroll-hint">Скролль для навигации ↓</div>
+
+    <main id="main">
+        <!-- HERO Section -->
+        <section class="hero" id="section-hero">
+            <div class="content-block float-anim" data-speed="0.1">
+                <span class="label">Креативный разработчик</span>
+                <div class="heading-wrap" id="heading-hero">
+                    <h1 class="pulp-layer">SEYATEL</h1>
+                    <h1 class="pulp-layer ghost">SEYATEL</h1>
+                    <h1 class="pulp-layer outline-layer">SEYATEL</h1>
+                </div>
+                <p class="description">Цифровой ремесленник на границе кода и искусства. Создаю текучие визуальные опыты.</p>
+            </div>
+
+            <div class="floating-data">
+                <div class="meta-item">
+                    Состояние
+                    <span class="meta-val" id="state-val">СТАТИЧЕСКИЙ_БАЛАНС</span>
+                </div>
+                <div class="meta-item">
+                    Скорость
+                    <span class="meta-val" id="velocity-val">0.00</span>
+                </div>
+                <div class="meta-item" style="color: var(--pulp-accent);">
+                    Позиция
+                    <span class="meta-val" id="coord-val">0.00 // 0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO Deep Dive -->
+        <div class="portfolio-container" id="portfolio-container">
+            <div class="portfolio-sticky" id="portfolio-sticky">
+                <div class="portfolio-title" id="portfolio-title">
+                    <span class="label">Избранные работы</span>
+                    <h2>ПОРТФОЛИО</h2>
+                </div>
+
+                <!-- Slide 1: MEDUZIA -->
+                <div class="slide" data-index="0">
+                    <!-- Hydro Background for MEDUZIA -->
+                    <div class="hydro-canvas">
+                        <div class="caustics"></div>
+                        <div class="bubble-field" id="bubbleField"></div>
+                    </div>
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="photo_5397656345336550024_x.jpg" alt="Meduzia">
+                        </div>
+                        <div class="slide-info">
+                            <div class="slide-number">01 / 06</div>
+                            <h3 class="slide-name">MEDUZIA</h3>
+                            <p class="slide-desc">Иммерсивный сайт для музея медуз в Москве. Глубоководная атмосфера с интерактивными элементами и плавной анимацией.</p>
+                            <div class="slide-tags">
+                                <span class="slide-tag">Web Design</span>
+                                <span class="slide-tag">3D</span>
+                                <span class="slide-tag">Animation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: YANIS -->
+                <div class="slide" data-index="1">
+                    <!-- Sky Background for YANIS -->
+                    <div class="sky-canvas">
+                        <div class="sun-container">
+                            <div class="sun-core"></div>
+                            <div class="lens-flare"></div>
+                        </div>
+                        <div class="cloud cloud-1"></div>
+                        <div class="cloud cloud-2"></div>
+                    </div>
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="photo_5397656345336550025_x.jpg" alt="Yanis">
+                        </div>
+                        <div class="slide-info">
+                            <div class="slide-number">02 / 06</div>
+                            <h3 class="slide-name">ЯНИС</h3>
+                            <p class="slide-desc">Сайт благотворительного фонда с воздушным дизайном. Кристаллы и облака создают ощущение чистоты и надежды.</p>
+                            <div class="slide-tags">
+                                <span class="slide-tag">Landing</span>
+                                <span class="slide-tag">UI/UX</span>
+                                <span class="slide-tag">Charity</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: ORBITAL -->
+                <div class="slide" data-index="2">
+                    <!-- Mars Background for ORBITAL -->
+                    <div class="mars-canvas">
+                        <canvas id="marsCanvas"></canvas>
+                        <div class="mars-grain"></div>
+                        <div class="scanner-line"></div>
+                    </div>
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="photo_5397656345336550026_x.jpg" alt="Orbital">
+                        </div>
+                        <div class="slide-info">
+                            <div class="slide-number">03 / 06</div>
+                            <h3 class="slide-name">ORBITAL</h3>
+                            <p class="slide-desc">Интерактивная платформа для исследования космоса. Sci-fi интерфейс с данными об экзопланетах и космических миссиях.</p>
+                            <div class="slide-tags">
+                                <span class="slide-tag">Sci-Fi</span>
+                                <span class="slide-tag">Dashboard</span>
+                                <span class="slide-tag">Data Viz</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: GEOCYPH -->
+                <div class="slide" data-index="3">
+                    <!-- Matrix Background for GEOCYPH -->
+                    <div class="matrix-canvas">
+                        <canvas id="filamentCanvas"></canvas>
+                        <div class="scanlines"></div>
+                        <div class="matrix-vignette"></div>
+                    </div>
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="photo_5397656345336550027_x.jpg" alt="Geocyph">
+                        </div>
+                        <div class="slide-info">
+                            <div class="slide-number">04 / 06</div>
+                            <h3 class="slide-name">GEOCYPH</h3>
+                            <p class="slide-desc">Лендинг для сервиса кибербезопасности. Матричная эстетика с неоновыми акцентами подчёркивает защиту данных.</p>
+                            <div class="slide-tags">
+                                <span class="slide-tag">Cybersec</span>
+                                <span class="slide-tag">Dark UI</span>
+                                <span class="slide-tag">Neon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: PROTOCOL -->
+                <div class="slide" data-index="4">
+                    <!-- Observer Lens Background for PROTOCOL -->
+                    <div class="lens-canvas">
+                        <div class="lens-assembly">
+                            <div class="lens-ring ring-outer"></div>
+                            <div class="lens-ring ring-middle"></div>
+                            <div class="lens-ring ring-inner"></div>
+                            <div class="lens-glass">
+                                <div class="lens-reflection"></div>
+                                <div class="iris" id="protocolIris">
+                                    <div class="iris-blade"></div>
+                                    <div class="iris-blade"></div>
+                                    <div class="iris-blade"></div>
+                                    <div class="iris-blade"></div>
+                                    <div class="iris-blade"></div>
+                                    <div class="iris-blade"></div>
+                                    <div class="pupil"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lens-caustics"></div>
+                        <div class="corner-bracket top-left"></div>
+                        <div class="corner-bracket top-right"></div>
+                        <div class="corner-bracket bottom-left"></div>
+                        <div class="corner-bracket bottom-right"></div>
+                        <div class="hud-overlay">
+                            <div class="hud-text">OBSERVING</div>
+                            <div class="rec-indicator"><span class="rec-dot"></span>REC</div>
+                        </div>
+                    </div>
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="photo_5397656345336550028_x.jpg" alt="Protocol">
+                        </div>
+                        <div class="slide-info">
+                            <div class="slide-number">05 / 06</div>
+                            <h3 class="slide-name">PROTOCOL</h3>
+                            <p class="slide-desc">Минималистичный интерфейс для криптопроекта. Глубокий чёрный фон и 3D типографика создают ощущение премиальности.</p>
+                            <div class="slide-tags">
+                                <span class="slide-tag">Crypto</span>
+                                <span class="slide-tag">3D Type</span>
+                                <span class="slide-tag">Minimal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 6: ЛЕКМАН -->
+                <div class="slide" data-index="5">
+                    <!-- Blueprint Background for ЛЕКМАН -->
+                    <div class="blueprint-canvas" id="blueprintCanvas">
+                        <div class="blueprint-grid"></div>
+                        <div class="cyanotype-texture"></div>
+                        <div class="blueprint-scanner"></div>
+                        <div class="blueprint-circle">
+                            <div class="circle-measure">Ø 400mm</div>
+                        </div>
+                        <div class="blueprint-annotations">
+                            <svg width="100%" height="100%">
+                                <path class="annotation-line" d="M 80,80 L 180,180" />
+                                <text x="90" y="70" class="annotation-text">VECTOR_A</text>
+                                <path class="annotation-line" d="M 85%,20% L 75%,35%" />
+                                <text x="86%" y="18%" class="annotation-text">REF_POINT</text>
+                            </svg>
+                        </div>
+                        <div class="blueprint-corner tl"></div>
+                        <div class="blueprint-corner tr"></div>
+                        <div class="blueprint-corner bl"></div>
+                        <div class="blueprint-corner br"></div>
+                    </div>
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="photo_5397656345336550030_w.jpg" alt="Lekman">
+                        </div>
+                        <div class="slide-info">
+                            <div class="slide-number">06 / 06</div>
+                            <h3 class="slide-name">ЛЕКМАН</h3>
+                            <p class="slide-desc">Корпоративный сайт для производителя металлоконструкций. Технический дизайн с чертёжными элементами и точными линиями.</p>
+                            <div class="slide-tags">
+                                <span class="slide-tag">Corporate</span>
+                                <span class="slide-tag">Industrial</span>
+                                <span class="slide-tag">Tech</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-progress">
+                    <div class="progress-dot" data-index="0"></div>
+                    <div class="progress-dot" data-index="1"></div>
+                    <div class="progress-dot" data-index="2"></div>
+                    <div class="progress-dot" data-index="3"></div>
+                    <div class="progress-dot" data-index="4"></div>
+                    <div class="progress-dot" data-index="5"></div>
+                </div>
+
+                <div class="depth-indicator">ГЛУБИНА: <span id="depth-val">0.00</span></div>
+            </div>
+        </div>
+
+        <!-- RISO Text Reveal Section -->
+        <div class="riso-container" id="riso-container">
+            <div class="riso-sticky">
+                <div class="riso-text active" id="riso-1">нравится?</div>
+                <div class="riso-text" id="riso-2">ты можешь</div>
+                <div class="riso-text" id="riso-3">быть</div>
+                <div class="riso-text" id="riso-4">следующим</div>
+            </div>
+        </div>
+
+        <div class="flash-layer" id="flash"></div>
+
+        <!-- CONTACT Section -->
+        <section class="contact-section" id="section-contact">
+            <div id="cosmos-container">
+                <div id="cosmos-overlay"></div>
+                <!-- Graphite Diffusion Layer for black-to-white transition -->
+                <div id="diffusion-layer"></div>
+            </div>
+        </section>
+
+        <!-- SVG Filter for Graphite Smudge Effect -->
+        <svg class="diffusion-svg" style="position:absolute;width:0;height:0;">
+            <defs>
+                <filter id="graphite-smudge">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+
+                <!-- Wind Displacement Filter for Flying Words -->
+                <filter id="wind-displacement" x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence
+                        type="fractalNoise"
+                        baseFrequency="0.015 0.08"
+                        numOctaves="3"
+                        seed="1"
+                        result="noise"
+                        id="wind-turbulence">
+                        <animate
+                            attributeName="baseFrequency"
+                            values="0.015 0.08; 0.02 0.12; 0.015 0.08"
+                            dur="8s"
+                            repeatCount="indefinite" />
+                    </feTurbulence>
+                    <feDisplacementMap
+                        in="SourceGraphic"
+                        in2="noise"
+                        scale="25"
+                        xChannelSelector="R"
+                        yChannelSelector="G"
+                        result="displaced"
+                        id="wind-displace" />
+                    <feGaussianBlur in="displaced" stdDeviation="0.5" result="blur" />
+                    <feComposite in="displaced" in2="blur" operator="over" />
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Flying Words Container (HTML-based with SVG filter) -->
+        <div id="flying-words-container">
+            <div class="flying-word" id="word-1">КАЧЕСТВО</div>
+            <div class="flying-word" id="word-2">СКОРОСТЬ</div>
+            <div class="flying-word" id="word-3">НАДЕЖНОСТЬ</div>
+        </div>
+
+        <!-- Final Black Overlay for Ending -->
+        <div id="final-black-overlay"></div>
+
+        <!-- Viscous Background for Final Section -->
+        <div class="molten-container" id="molten-bg">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3" id="mouse-blob"></div>
+        </div>
+
+        <!-- Grain Overlay -->
+        <div class="grain-overlay" id="grain-overlay">
+            <svg width="100%" height="100%">
+                <rect width="100%" height="100%" filter="url(#grain)"></rect>
+            </svg>
+        </div>
+
+        <!-- Final CTA Button (Lusion-style) -->
+        <div id="final-btn-wrapper">
+            <div class="lusion-btn" id="final-btn">
+                <div class="btn-backdrop">
+                    <div class="scan-line"></div>
+                </div>
+                <div class="viscous-blob" id="viscous-blob"></div>
+
+                <div class="btn-content">
+                    <span class="label-main">TELEGRAM</span>
+                    <div class="btn-links">
+                        <a href="https://t.me/seyatel_tg" target="_blank" class="label-mono btn-link">@seyatel_tg</a>
+                        <a href="https://t.me/Jysson" target="_blank" class="label-mono btn-link">@Jysson</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organic Fluid Elements -->
+            <div class="liquid-container">
+                <div class="liquid-drop"></div>
+                <div class="liquid-drop"></div>
+            </div>
+        </div>
+
+        <!-- SVG Filter for Viscous Goo Effect -->
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none">
+            <defs>
+                <filter id="viscous-goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                </filter>
+            </defs>
+        </svg>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script>
+        // GLTFLoader for Three.js r160
+        THREE.GLTFLoader = class GLTFLoader {
+            constructor(manager) {
+                this.manager = manager || THREE.DefaultLoadingManager;
+            }
+            load(url, onLoad, onProgress, onError) {
+                const loader = new THREE.FileLoader(this.manager);
+                loader.setResponseType('arraybuffer');
+                loader.load(url, (data) => {
+                    this.parse(data, '', onLoad, onError);
+                }, onProgress, onError);
+            }
+            parse(data, path, onLoad, onError) {
+                const magic = new Uint8Array(data, 0, 4);
+                const isGLB = magic[0] === 0x67 && magic[1] === 0x6C && magic[2] === 0x54 && magic[3] === 0x46;
+
+                if (isGLB) {
+                    const dataView = new DataView(data);
+                    const version = dataView.getUint32(4, true);
+                    const length = dataView.getUint32(8, true);
+
+                    let chunkIndex = 12;
+                    let json = null;
+                    let binary = null;
+
+                    while (chunkIndex < length) {
+                        const chunkLength = dataView.getUint32(chunkIndex, true);
+                        const chunkType = dataView.getUint32(chunkIndex + 4, true);
+
+                        if (chunkType === 0x4E4F534A) { // JSON
+                            const jsonData = new Uint8Array(data, chunkIndex + 8, chunkLength);
+                            json = JSON.parse(new TextDecoder().decode(jsonData));
+                        } else if (chunkType === 0x004E4942) { // BIN
+                            binary = data.slice(chunkIndex + 8, chunkIndex + 8 + chunkLength);
+                        }
+                        chunkIndex += 8 + chunkLength;
+                    }
+
+                    if (json) {
+                        this.parseGLTF(json, binary, onLoad, onError);
+                    }
+                }
+            }
+            parseGLTF(json, binary, onLoad, onError) {
+                const scene = new THREE.Group();
+
+                // Create procedural rock texture
+                const createRockTexture = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 512;
+                    canvas.height = 512;
+                    const ctx = canvas.getContext('2d');
+
+                    // Base color - dark gray/brown
+                    ctx.fillStyle = '#4a4035';
+                    ctx.fillRect(0, 0, 512, 512);
+
+                    // Add noise and rock patterns
+                    const imageData = ctx.getImageData(0, 0, 512, 512);
+                    const data = imageData.data;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const x = (i / 4) % 512;
+                        const y = Math.floor((i / 4) / 512);
+
+                        // Multi-layer noise for rock texture
+                        const noise1 = Math.sin(x * 0.05) * Math.cos(y * 0.05) * 30;
+                        const noise2 = Math.sin(x * 0.1 + y * 0.1) * 20;
+                        const noise3 = (Math.random() - 0.5) * 40;
+
+                        // Combine noises
+                        const variation = noise1 + noise2 + noise3;
+
+                        // Apply to RGB channels with slight color variation
+                        data[i] = Math.max(0, Math.min(255, data[i] + variation + Math.random() * 15));     // R
+                        data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + variation - 5));              // G
+                        data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + variation - 10));             // B
+                    }
+
+                    ctx.putImageData(imageData, 0, 0);
+
+                    // Add some crater-like darker spots
+                    for (let i = 0; i < 20; i++) {
+                        const cx = Math.random() * 512;
+                        const cy = Math.random() * 512;
+                        const radius = 10 + Math.random() * 40;
+                        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+                        gradient.addColorStop(0, 'rgba(30, 25, 20, 0.6)');
+                        gradient.addColorStop(0.5, 'rgba(40, 35, 30, 0.3)');
+                        gradient.addColorStop(1, 'rgba(50, 45, 40, 0)');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+                    }
+
+                    // Add some bright mineral spots
+                    for (let i = 0; i < 30; i++) {
+                        const cx = Math.random() * 512;
+                        const cy = Math.random() * 512;
+                        const radius = 2 + Math.random() * 8;
+                        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+                        gradient.addColorStop(0, 'rgba(120, 100, 80, 0.8)');
+                        gradient.addColorStop(1, 'rgba(80, 70, 60, 0)');
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    // Draw Telegram logo
+                    const logoX = 256;
+                    const logoY = 256;
+                    const logoSize = 120;
+
+                    // Glowing background circle for logo
+                    const glowGradient = ctx.createRadialGradient(logoX, logoY, 0, logoX, logoY, logoSize * 0.8);
+                    glowGradient.addColorStop(0, 'rgba(0, 136, 204, 0.9)');
+                    glowGradient.addColorStop(0.7, 'rgba(0, 136, 204, 0.4)');
+                    glowGradient.addColorStop(1, 'rgba(0, 136, 204, 0)');
+                    ctx.fillStyle = glowGradient;
+                    ctx.beginPath();
+                    ctx.arc(logoX, logoY, logoSize * 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Telegram circle
+                    ctx.beginPath();
+                    ctx.arc(logoX, logoY, logoSize * 0.5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#0088cc';
+                    ctx.fill();
+
+                    // Draw the paper plane icon
+                    ctx.save();
+                    ctx.translate(logoX, logoY);
+                    ctx.scale(logoSize / 100, logoSize / 100);
+
+                    // Paper plane shape
+                    ctx.beginPath();
+                    ctx.moveTo(-25, 0);      // Left point
+                    ctx.lineTo(25, -20);     // Top right
+                    ctx.lineTo(10, 0);       // Middle
+                    ctx.lineTo(25, 20);      // Bottom right
+                    ctx.lineTo(-25, 0);      // Back to left
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+
+                    // Inner fold line
+                    ctx.beginPath();
+                    ctx.moveTo(-5, 0);
+                    ctx.lineTo(10, 0);
+                    ctx.lineTo(5, 15);
+                    ctx.fillStyle = '#b0d4e8';
+                    ctx.fill();
+
+                    ctx.restore();
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    return texture;
+                };
+
+                // Create bump/normal-like texture for depth
+                const createBumpTexture = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 256;
+                    canvas.height = 256;
+                    const ctx = canvas.getContext('2d');
+
+                    ctx.fillStyle = '#808080';
+                    ctx.fillRect(0, 0, 256, 256);
+
+                    const imageData = ctx.getImageData(0, 0, 256, 256);
+                    const data = imageData.data;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const x = (i / 4) % 256;
+                        const y = Math.floor((i / 4) / 256);
+
+                        const noise = Math.sin(x * 0.2) * Math.cos(y * 0.2) * 50 +
+                                     Math.sin(x * 0.5 + y * 0.3) * 30 +
+                                     (Math.random() - 0.5) * 60;
+
+                        const val = Math.max(0, Math.min(255, 128 + noise));
+                        data[i] = val;
+                        data[i + 1] = val;
+                        data[i + 2] = val;
+                    }
+
+                    ctx.putImageData(imageData, 0, 0);
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    return texture;
+                };
+
+                const rockTexture = createRockTexture();
+                const bumpTexture = createBumpTexture();
+
+                // Parse meshes
+                if (json.meshes && json.accessors && json.bufferViews) {
+                    json.meshes.forEach((meshDef, meshIndex) => {
+                        meshDef.primitives.forEach(primitive => {
+                            const geometry = new THREE.BufferGeometry();
+
+                            // Get position data
+                            if (primitive.attributes.POSITION !== undefined) {
+                                const accessor = json.accessors[primitive.attributes.POSITION];
+                                const bufferView = json.bufferViews[accessor.bufferView];
+                                const positions = new Float32Array(binary, bufferView.byteOffset || 0, accessor.count * 3);
+                                geometry.setAttribute('position', new THREE.BufferAttribute(positions.slice(), 3));
+                            }
+
+                            // Get indices
+                            if (primitive.indices !== undefined) {
+                                const accessor = json.accessors[primitive.indices];
+                                const bufferView = json.bufferViews[accessor.bufferView];
+                                const componentType = accessor.componentType;
+                                let indices;
+                                if (componentType === 5123) {
+                                    indices = new Uint16Array(binary, bufferView.byteOffset || 0, accessor.count);
+                                } else {
+                                    indices = new Uint32Array(binary, bufferView.byteOffset || 0, accessor.count);
+                                }
+                                geometry.setIndex(new THREE.BufferAttribute(indices.slice(), 1));
+                            }
+
+                            // Generate UVs for texture mapping
+                            if (!primitive.attributes.TEXCOORD_0) {
+                                const positions = geometry.attributes.position.array;
+                                const uvs = new Float32Array(positions.length / 3 * 2);
+                                for (let i = 0; i < positions.length / 3; i++) {
+                                    // Spherical UV mapping
+                                    const x = positions[i * 3];
+                                    const y = positions[i * 3 + 1];
+                                    const z = positions[i * 3 + 2];
+                                    const len = Math.sqrt(x * x + y * y + z * z) || 1;
+                                    uvs[i * 2] = 0.5 + Math.atan2(z / len, x / len) / (2 * Math.PI);
+                                    uvs[i * 2 + 1] = 0.5 - Math.asin(y / len) / Math.PI;
+                                }
+                                geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+                            }
+
+                            geometry.computeVertexNormals();
+
+                            // Rock material with procedural textures
+                            const material = new THREE.MeshStandardMaterial({
+                                map: rockTexture,
+                                bumpMap: bumpTexture,
+                                bumpScale: 0.5,
+                                roughness: 0.9,
+                                metalness: 0.1,
+                                emissive: 0xff4400,
+                                emissiveIntensity: 0.2
+                            });
+                            const mesh = new THREE.Mesh(geometry, material);
+                            scene.add(mesh);
+                        });
+                    });
+                }
+
+                onLoad({ scene: scene });
+            }
+        };
+    </script>
+    <script src="main.js"></script>
+    <script src="cosmic.js"></script>
+    <script src="meteor.js"></script>
+    <script src="rocket.js"></script>
+</body>
+</html>
