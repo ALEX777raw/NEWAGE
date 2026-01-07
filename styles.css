@@ -185,6 +185,57 @@ h1, h2 {
 .hero {
     justify-content: flex-start;
     padding-left: 8%;
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0a;
+}
+
+/* Prismatic shader background */
+#prismatic-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.85;
+}
+
+.hero .content-block {
+    position: relative;
+    z-index: 2;
+}
+
+.hero .floating-data {
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.hero h1 {
+    color: #ffffff;
+    text-shadow: 0 0 60px rgba(0, 255, 170, 0.3);
+}
+
+.hero .ghost {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(0, 255, 170, 0.4);
+    text-shadow: none;
+}
+
+.hero .outline-layer {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+}
+
+.hero .label {
+    color: #00ffaa;
+}
+
+.hero .description {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.hero .meta-val {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .middle {
