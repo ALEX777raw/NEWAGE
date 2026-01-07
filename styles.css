@@ -238,10 +238,6 @@ h1, h2 {
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Rounded bottom corners for hero section */
-.hero {
-    border-radius: 0 0 60px 60px;
-}
 
 .middle {
     justify-content: flex-end;
