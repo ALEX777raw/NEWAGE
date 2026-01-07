@@ -20,6 +20,9 @@
     let explosionCenter = new THREE.Vector3(-75, 40, -85); // Where meteor ends
     let shakeIntensity = 0;
 
+    // Mobile detection for performance
+    const isMobile = window.innerWidth < 768;
+
     // Textures
     let explosionTexture, smokeTexture, sparkTexture;
 
@@ -305,7 +308,8 @@
             antialias: true
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // Lower pixel ratio on mobile for better performance
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
         renderer.domElement.style.position = 'fixed';
         renderer.domElement.style.top = '0';
         renderer.domElement.style.left = '0';
@@ -434,8 +438,9 @@
 
         const center = explosionCenter.clone();
 
-        // Create massive explosion
-        for (let i = 0; i < 200; i++) {
+        // Create massive explosion (reduced on mobile)
+        const explosionCount = isMobile ? 60 : 200;
+        for (let i = 0; i < explosionCount; i++) {
             const angle1 = Math.random() * Math.PI * 2;
             const angle2 = Math.random() * Math.PI * 2;
             const speed = Math.random() * 3 + 1;
@@ -451,8 +456,9 @@
             scene.add(particle.sprite);
         }
 
-        // Smoke particles
-        for (let i = 0; i < 80; i++) {
+        // Smoke particles (reduced on mobile)
+        const smokeExplosionCount = isMobile ? 25 : 80;
+        for (let i = 0; i < smokeExplosionCount; i++) {
             const offset = new THREE.Vector3(
                 (Math.random() - 0.5) * 10,
                 (Math.random() - 0.5) * 10,
@@ -842,8 +848,9 @@
         // Fire comes from bottom of rocket (opposite to direction of travel)
         const rocketPos = rocket.position.clone();
 
-        // Create LOTS of fire particles for intense effect
-        const particleCount = 8 + Math.floor(shakeIntensity * 5); // More particles as speed increases
+        // Create fire particles (reduced on mobile for performance)
+        const baseCount = isMobile ? 3 : 8;
+        const particleCount = baseCount + Math.floor(shakeIntensity * (isMobile ? 2 : 5));
 
         for (let i = 0; i < particleCount; i++) {
             // Main engine fire - concentrated
@@ -869,8 +876,9 @@
             scene.add(particle.sprite);
         }
 
-        // Add some extra bright core particles
-        for (let i = 0; i < 3; i++) {
+        // Add some extra bright core particles (reduced on mobile)
+        const coreCount = isMobile ? 1 : 3;
+        for (let i = 0; i < coreCount; i++) {
             const offset = new THREE.Vector3(
                 (Math.random() - 0.5) * 1,
                 8,
@@ -890,8 +898,9 @@
             scene.add(particle.sprite);
         }
 
-        // Create smoke trail - less frequent than fire, but longer lasting
-        const smokeCount = 3 + Math.floor(shakeIntensity * 3);
+        // Create smoke trail - less frequent than fire, but longer lasting (reduced on mobile)
+        const baseSmokeCount = isMobile ? 1 : 3;
+        const smokeCount = baseSmokeCount + Math.floor(shakeIntensity * (isMobile ? 1 : 3));
         for (let i = 0; i < smokeCount; i++) {
             // Smoke spawns further behind the rocket
             const offset = new THREE.Vector3(

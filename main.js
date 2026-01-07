@@ -11,9 +11,10 @@ let currentScroll = window.pageYOffset;
 let lastScroll = currentScroll;
 let velocity = 0;
 
-// Create fiber decorations
+// Create fiber decorations (reduced on mobile)
+const fiberCount = window.innerWidth < 768 ? 5 : 15;
 document.querySelectorAll('section').forEach(section => {
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < fiberCount; i++) {
         const fiber = document.createElement('div');
         fiber.className = 'fiber-block';
         fiber.style.top = Math.random() * 100 + '%';
@@ -230,7 +231,9 @@ function createBubbles() {
     const bubbleField = document.getElementById('bubbleField');
     if (!bubbleField) return;
 
-    const bubbleCount = 40;
+    // Reduced bubbles on mobile for performance
+    const isMobile = window.innerWidth < 768;
+    const bubbleCount = isMobile ? 15 : 40;
 
     for (let i = 0; i < bubbleCount; i++) {
         const bubble = document.createElement('div');
@@ -264,7 +267,9 @@ function createMarsParticles() {
 
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const particleCount = 180;
+    // Reduced particles on mobile for performance
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 60 : 180;
 
     function resize() {
         const container = canvas.parentElement;
@@ -389,21 +394,26 @@ function createMatrixFilaments() {
 
     function initParticles() {
         particles = [];
-        const numberOfParticles = (width * height) / 12000;
+        // Reduced density on mobile for performance
+        const isMobile = width < 768;
+        const divisor = isMobile ? 25000 : 12000;
+        const numberOfParticles = Math.min((width * height) / divisor, isMobile ? 80 : 200);
         for (let i = 0; i < numberOfParticles; i++) {
             particles.push(new FilamentParticle());
         }
     }
 
     function connect() {
+        // Reduced connection distance on mobile for performance
+        const maxDistance = width < 768 ? 80 : 150;
         for (let a = 0; a < particles.length; a++) {
             for (let b = a; b < particles.length; b++) {
                 let dx = particles[a].x - particles[b].x;
                 let dy = particles[a].y - particles[b].y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 150) {
-                    let opacityValue = 1 - (distance / 150);
+                if (distance < maxDistance) {
+                    let opacityValue = 1 - (distance / maxDistance);
                     ctx.strokeStyle = `rgba(0, 255, 102, ${opacityValue * 0.3})`;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();

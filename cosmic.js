@@ -21,6 +21,19 @@
         drift: 0.015
     };
 
+    // Mobile performance optimization
+    function getResponsiveConfig() {
+        const w = window.innerWidth;
+        if (w < 500) {
+            return { particles: 3000, stars: 150, spacing: 5 };
+        } else if (w < 768) {
+            return { particles: 5000, stars: 300, spacing: 4 };
+        } else if (w < 1024) {
+            return { particles: 8000, stars: 500, spacing: 3 };
+        }
+        return { particles: 15000, stars: 800, spacing: 3 };
+    }
+
     let canvas, ctx;
     let width, height;
     let particles = [];
@@ -443,15 +456,20 @@
         particles = [];
         stars = [];
 
-        // Create many white cosmic stars
-        for (let i = 0; i < 800; i++) {
+        // Get responsive config for performance
+        const responsiveConfig = getResponsiveConfig();
+        config.spacing = responsiveConfig.spacing;
+
+        // Create white cosmic stars (reduced on mobile)
+        for (let i = 0; i < responsiveConfig.stars; i++) {
             stars.push(new Star());
         }
 
         if (textPixels.length === 0) return;
 
-        // Create exactly particleCount particles, distributed across ALL text pixels
-        for (let i = 0; i < config.particleCount; i++) {
+        // Create particles (reduced on mobile for performance)
+        const particleCount = responsiveConfig.particles;
+        for (let i = 0; i < particleCount; i++) {
             // Cycle through all text pixels
             const pixelIndex = i % textPixels.length;
             const pixel = textPixels[pixelIndex];

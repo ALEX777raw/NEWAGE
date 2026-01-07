@@ -898,6 +898,51 @@ h1, h2 {
 }
 
 @media (max-width: 768px) {
+    /* Disable heavy filters on mobile for performance */
+    .content-block {
+        filter: none !important;
+    }
+
+    .is-scrolling .content-block {
+        filter: none !important;
+    }
+
+    .portfolio-title {
+        filter: none !important;
+    }
+
+    .is-scrolling .portfolio-title {
+        filter: none !important;
+    }
+
+    /* Disable parallax effects on mobile */
+    .pulp-layer {
+        transform: none !important;
+    }
+
+    /* Reduce animation complexity */
+    .blob {
+        animation: none !important;
+        filter: blur(40px);
+    }
+
+    /* Disable caustics animation on mobile */
+    .caustics {
+        animation: none !important;
+        opacity: 0.15;
+    }
+
+    /* Simplify lens animations */
+    .ring-middle,
+    .ring-inner {
+        animation: none !important;
+    }
+
+    /* Reduce cloud animations */
+    .cloud {
+        animation: none !important;
+    }
+
     h1, h2 {
         font-size: clamp(2.5rem, 10vw, 5rem);
     }
@@ -1146,6 +1191,45 @@ h1, h2 {
     .viscous-blob {
         width: 60px;
         height: 60px;
+    }
+
+    /* Touch-friendly improvements */
+    * {
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Disable hover effects on touch */
+    @media (hover: none) {
+        .slide-image:hover img {
+            transform: none;
+        }
+
+        .lusion-btn:hover {
+            transform: none;
+        }
+
+        .lusion-btn:hover .label-main {
+            letter-spacing: 0.15em;
+        }
+
+        .btn-link:hover {
+            transform: none;
+        }
+    }
+
+    /* Larger touch targets */
+    .btn-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .progress-dot {
+        min-width: 20px;
+        min-height: 20px;
+        padding: 6px;
     }
 }
 
