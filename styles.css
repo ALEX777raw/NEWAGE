@@ -958,13 +958,13 @@ h1, h2 {
 
     /* Lusion Button Mobile */
     .lusion-btn {
-        padding: 18px 28px;
-        border-radius: 10px;
+        padding: 15px 22px;
+        border-radius: 8px;
     }
 
     .label-main {
-        font-size: 1rem;
-        letter-spacing: 0.05em;
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
     }
 
     .label-mono {
@@ -1119,13 +1119,13 @@ h1, h2 {
 
     /* Smaller Telegram button on mobile */
     .lusion-btn {
-        padding: 15px 25px;
-        border-radius: 10px;
+        padding: 12px 20px;
+        border-radius: 8px;
     }
 
     .label-main {
-        font-size: 0.85rem;
-        letter-spacing: 0.03em;
+        font-size: 0.7rem;
+        letter-spacing: 0.02em;
     }
 
     .label-mono {
