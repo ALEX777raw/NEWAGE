@@ -238,24 +238,9 @@ h1, h2 {
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Glass transition at bottom of hero */
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 35%;
-    background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(10, 10, 10, 0.3) 20%,
-        rgba(232, 228, 219, 0.5) 50%,
-        rgba(232, 228, 219, 0.85) 75%,
-        var(--pulp-bg) 100%
-    );
-    pointer-events: none;
-    z-index: 1;
+/* Rounded bottom corners for hero section */
+.hero {
+    border-radius: 0 0 60px 60px;
 }
 
 .middle {
