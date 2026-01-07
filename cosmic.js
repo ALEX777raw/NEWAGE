@@ -380,13 +380,15 @@
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
 
-        // Use fixed canvas size for consistent text rendering
-        const canvasWidth = 1600;
-        const canvasHeight = 400;
+        // Responsive canvas and font size
+        const isMobile = width < 768;
+        const isSmallMobile = width < 500;
+        const canvasWidth = isSmallMobile ? 600 : (isMobile ? 900 : 1600);
+        const canvasHeight = isSmallMobile ? 150 : (isMobile ? 200 : 400);
         tempCanvas.width = canvasWidth;
         tempCanvas.height = canvasHeight;
 
-        const fontSize = 200;
+        const fontSize = isSmallMobile ? 60 : (isMobile ? 90 : 200);
         tempCtx.font = `bold ${fontSize}px "Arial Black", Arial, sans-serif`;
         tempCtx.fillStyle = 'white';
         tempCtx.textAlign = 'center';
