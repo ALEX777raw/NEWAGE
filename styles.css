@@ -238,6 +238,17 @@ h1, h2 {
     color: rgba(255, 255, 255, 0.8);
 }
 
+/* Portfolio overlaps hero from above */
+.portfolio-container {
+    position: relative;
+    z-index: 10;
+    margin-top: -80px;
+}
+
+.portfolio-sticky {
+    border-radius: 40px 40px 0 0;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.4);
+}
 
 .middle {
     justify-content: flex-end;
