@@ -40,6 +40,40 @@
                 </feTurbulence>
                 <feDisplacementMap in="SourceGraphic" scale="30" />
             </filter>
+
+            <!-- Fluidic Chrome Filter -->
+            <filter id="fluid-chrome" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.01 0.01"
+                    numOctaves="2"
+                    result="noise"
+                    seed="1"
+                >
+                    <animate
+                        attributeName="baseFrequency"
+                        values="0.01 0.01; 0.015 0.02; 0.01 0.01"
+                        dur="10s"
+                        repeatCount="indefinite"
+                    />
+                </feTurbulence>
+                <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="noise"
+                    scale="25"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                    result="displaced"
+                    id="chrome-displacement"
+                />
+                <feComponentTransfer in="displaced" result="high-contrast">
+                    <feFuncR type="gamma" exponent="0.5"/>
+                    <feFuncG type="gamma" exponent="0.5"/>
+                    <feFuncB type="gamma" exponent="0.5"/>
+                </feComponentTransfer>
+                <feGaussianBlur in="high-contrast" stdDeviation="0.5" result="soft"/>
+                <feComposite in="high-contrast" in2="soft" operator="over"/>
+            </filter>
         </defs>
     </svg>
 
@@ -58,10 +92,8 @@
         <section class="hero" id="section-hero">
             <div class="content-block float-anim" data-speed="0.1">
                 <span class="label">Креативный разработчик</span>
-                <div class="heading-wrap" id="heading-hero">
-                    <h1 class="pulp-layer">SEYATEL</h1>
-                    <h1 class="pulp-layer ghost">SEYATEL</h1>
-                    <h1 class="pulp-layer outline-layer">SEYATEL</h1>
+                <div class="chrome-text-wrapper">
+                    <h1 class="chrome-text" id="chrome-hero-text">SEYATEL</h1>
                 </div>
                 <p class="description">Цифровой ремесленник на границе кода и искусства. Создаю текучие визуальные опыты.</p>
             </div>

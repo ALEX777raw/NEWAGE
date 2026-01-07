@@ -510,3 +510,38 @@ function initBlueprintParallax() {
 }
 
 initBlueprintParallax();
+
+// Chrome Text Interactive Effect
+function initChromeTextEffect() {
+    const chromeText = document.getElementById('chrome-hero-text');
+    const chromeDisplacement = document.getElementById('chrome-displacement');
+    const heroSection = document.getElementById('section-hero');
+
+    if (!chromeText || !chromeDisplacement || !heroSection) return;
+
+    heroSection.addEventListener('mousemove', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const diffX = (mouseX - centerX) / centerX;
+        const diffY = (mouseY - centerY) / centerY;
+
+        // Dynamic displacement based on mouse position
+        const dynamicScale = 25 + (Math.abs(diffX) * 80);
+        chromeDisplacement.setAttribute('scale', dynamicScale);
+
+        // Subtle parallax and skew
+        chromeText.style.transform = `translate3d(${diffX * 15}px, ${diffY * 10}px, 0) skew(${diffX * 3}deg)`;
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+        chromeDisplacement.setAttribute('scale', '25');
+        chromeText.style.transform = 'translate3d(0, 0, 0) skew(0deg)';
+    });
+}
+
+initChromeTextEffect();

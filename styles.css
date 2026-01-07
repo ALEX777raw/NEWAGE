@@ -211,19 +211,38 @@ h1, h2 {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.hero h1 {
-    color: #ffffff;
-    text-shadow: 0 0 60px rgba(0, 255, 170, 0.3);
+/* Chrome Text Effect */
+.chrome-text-wrapper {
+    position: relative;
+    display: inline-block;
+    filter: url(#fluid-chrome);
 }
 
-.hero .ghost {
+.chrome-text {
+    font-size: clamp(4rem, 15vw, 12rem);
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #a1a1a1 45%,
+        #000000 50%,
+        #a1a1a1 55%,
+        #404040 100%
+    );
+    background-size: 100% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(0, 255, 170, 0.4);
-    text-shadow: none;
+    transition: transform 0.3s ease-out;
+    user-select: none;
+    animation: flowChrome 8s linear infinite;
 }
 
-.hero .outline-layer {
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+@keyframes flowChrome {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 0% 200%; }
 }
 
 .hero .label {
