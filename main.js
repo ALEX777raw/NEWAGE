@@ -513,25 +513,84 @@ initBlueprintParallax();
 
 // ====== ABYSSAL UI - Underwater Effects ======
 
-// Create floating bubbles
+// Create floating bubbles - improved
 function createBubbles() {
     const bubbleContainer = document.getElementById('heroBubbles');
     if (!bubbleContainer) return;
 
-    const bubbleCount = window.innerWidth < 768 ? 20 : 40;
+    const bubbleCount = window.innerWidth < 768 ? 15 : 30;
 
     for (let i = 0; i < bubbleCount; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'bubble';
 
-        const size = Math.random() * 8 + 3;
+        const size = Math.random() * 12 + 4;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         bubble.style.left = `${Math.random() * 100}%`;
-        bubble.style.animationDuration = `${Math.random() * 12 + 6}s`;
-        bubble.style.animationDelay = `${Math.random() * 10}s`;
+        bubble.style.bottom = `-${size}px`;
+        bubble.style.animationDuration = `${Math.random() * 15 + 8}s`;
+        bubble.style.animationDelay = `${Math.random() * 15}s`;
 
         bubbleContainer.appendChild(bubble);
+    }
+}
+
+// Create plankton particles
+function createPlankton() {
+    const planktonContainer = document.getElementById('planktonContainer');
+    if (!planktonContainer) return;
+
+    const planktonCount = window.innerWidth < 768 ? 30 : 60;
+
+    for (let i = 0; i < planktonCount; i++) {
+        const plankton = document.createElement('div');
+        plankton.className = 'plankton';
+
+        const size = Math.random() * 3 + 1;
+        plankton.style.width = `${size}px`;
+        plankton.style.height = `${size}px`;
+        plankton.style.left = `${Math.random() * 100}%`;
+        plankton.style.top = `${Math.random() * 100}%`;
+
+        // Random drift direction
+        const driftX = (Math.random() - 0.5) * 100;
+        const driftY = (Math.random() - 0.5) * 150 - 50;
+        plankton.style.setProperty('--drift-x', `${driftX}px`);
+        plankton.style.setProperty('--drift-y', `${driftY}px`);
+
+        plankton.style.animationDuration = `${Math.random() * 20 + 10}s`;
+        plankton.style.animationDelay = `${Math.random() * 15}s`;
+
+        // Random color variation
+        const hue = 180 + Math.random() * 40;
+        plankton.style.background = `rgba(${150 + Math.random() * 50}, ${200 + Math.random() * 55}, 255, ${0.4 + Math.random() * 0.4})`;
+
+        planktonContainer.appendChild(plankton);
+    }
+}
+
+// Create bioluminescence spots
+function createBioluminescence() {
+    const biolumContainer = document.getElementById('biolumContainer');
+    if (!biolumContainer) return;
+
+    const biolumCount = window.innerWidth < 768 ? 5 : 12;
+    const colors = ['biolum-cyan', 'biolum-blue', 'biolum-green'];
+
+    for (let i = 0; i < biolumCount; i++) {
+        const biolum = document.createElement('div');
+        biolum.className = `biolum ${colors[Math.floor(Math.random() * colors.length)]}`;
+
+        const size = Math.random() * 30 + 10;
+        biolum.style.width = `${size}px`;
+        biolum.style.height = `${size}px`;
+        biolum.style.left = `${Math.random() * 100}%`;
+        biolum.style.top = `${20 + Math.random() * 60}%`;
+        biolum.style.animationDuration = `${Math.random() * 4 + 3}s`;
+        biolum.style.animationDelay = `${Math.random() * 5}s`;
+
+        biolumContainer.appendChild(biolum);
     }
 }
 
@@ -540,6 +599,7 @@ function initAbyssalParallax() {
     const heroSection = document.getElementById('section-hero');
     const distortContainer = document.getElementById('heroDistort');
     const heroTitle = document.querySelector('.hero-title-abyssal');
+    const depthLayers = document.querySelectorAll('.depth-layer');
 
     if (!heroSection || !distortContainer) return;
 
@@ -549,6 +609,12 @@ function initAbyssalParallax() {
 
         distortContainer.style.transform = `translate(${x}px, ${y}px)`;
 
+        // Parallax on depth layers
+        depthLayers.forEach((layer, index) => {
+            const speed = (index + 1) * 0.3;
+            layer.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+        });
+
         if (heroTitle) {
             heroTitle.style.textShadow = `${x * -2}px ${y * -2}px 80px rgba(79, 249, 255, 0.5)`;
         }
@@ -556,34 +622,17 @@ function initAbyssalParallax() {
 
     heroSection.addEventListener('mouseleave', () => {
         distortContainer.style.transform = 'translate(0, 0)';
+        depthLayers.forEach(layer => {
+            layer.style.transform = 'translate(0, 0)';
+        });
         if (heroTitle) {
             heroTitle.style.textShadow = '0 0 80px rgba(79, 249, 255, 0.5)';
         }
     });
 }
 
-// Depth counter animation
-function initDepthCounter() {
-    const depthEl = document.getElementById('depth-val');
-    const pressureEl = document.getElementById('pressure-val');
-
-    if (!depthEl) return;
-
-    let depth = 10984;
-    let pressure = 15750;
-
-    setInterval(() => {
-        depth += (Math.random() * 4 - 2);
-        depthEl.innerText = `${depth.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} M`;
-
-        if (pressureEl) {
-            pressure += (Math.random() * 2 - 1);
-            pressureEl.innerText = `${pressure.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} PSI`;
-        }
-    }, 150);
-}
-
 // Initialize all abyssal effects
 createBubbles();
+createPlankton();
+createBioluminescence();
 initAbyssalParallax();
-initDepthCounter();

@@ -98,18 +98,34 @@
     <main id="main">
         <!-- HERO Section - Abyssal UI -->
         <section class="hero abyssal" id="section-hero">
-            <!-- Light Rays -->
-            <div class="light-ray" style="left: 15%; opacity: 0.4;"></div>
-            <div class="light-ray" style="left: 35%; opacity: 0.2;"></div>
-            <div class="light-ray" style="left: 60%; opacity: 0.5;"></div>
-            <div class="light-ray" style="left: 85%; opacity: 0.3;"></div>
+            <!-- Depth Gradient Layers -->
+            <div class="depth-layer depth-layer-1"></div>
+            <div class="depth-layer depth-layer-2"></div>
+            <div class="depth-layer depth-layer-3"></div>
+
+            <!-- Light Rays from surface -->
+            <div class="light-ray" style="left: 10%;"></div>
+            <div class="light-ray" style="left: 25%;"></div>
+            <div class="light-ray" style="left: 45%;"></div>
+            <div class="light-ray" style="left: 65%;"></div>
+            <div class="light-ray" style="left: 80%;"></div>
+            <div class="light-ray" style="left: 92%;"></div>
 
             <!-- Caustics Layer -->
             <div class="hero-caustics"></div>
             <div class="hero-caustics-overlay"></div>
 
+            <!-- Underwater Fog -->
+            <div class="underwater-fog"></div>
+
+            <!-- Plankton/Particles Container -->
+            <div class="plankton-container" id="planktonContainer"></div>
+
             <!-- Bubble Container -->
             <div class="bubble-container" id="heroBubbles"></div>
+
+            <!-- Bioluminescence spots -->
+            <div class="biolum-container" id="biolumContainer"></div>
 
             <!-- Distorted Content -->
             <div class="distort-container" id="heroDistort">
@@ -118,8 +134,10 @@
                     <h1 class="hero-title-abyssal">SEYATEL</h1>
                     <p class="description abyssal-desc">Цифровой ремесленник на границе кода и искусства. Создаю текучие визуальные опыты.</p>
                 </div>
-
             </div>
+
+            <!-- Bottom darkness gradient -->
+            <div class="abyss-bottom"></div>
         </section>
 
         <!-- PORTFOLIO Deep Dive -->

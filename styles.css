@@ -191,7 +191,12 @@ h1, h2 {
 
 /* ====== ABYSSAL UI - Deep Sea Theme ====== */
 .hero.abyssal {
-    background: radial-gradient(circle at 50% -20%, #0c4a6e 0%, #000a12 80%);
+    background: linear-gradient(180deg,
+        #0a2540 0%,
+        #051525 30%,
+        #020a10 60%,
+        #000508 100%
+    );
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -199,22 +204,67 @@ h1, h2 {
     padding: 0;
 }
 
-/* Light Rays from surface */
-.light-ray {
+/* Depth Gradient Layers */
+.depth-layer {
     position: absolute;
-    top: -10%;
-    width: 3px;
-    height: 120%;
-    background: linear-gradient(to bottom, rgba(179, 247, 255, 0.3), transparent 70%);
-    transform: rotate(20deg);
-    filter: blur(8px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
+}
+
+.depth-layer-1 {
+    background: radial-gradient(ellipse at 50% 0%, rgba(20, 80, 120, 0.4) 0%, transparent 60%);
     z-index: 1;
 }
 
-.light-ray:nth-child(2) { transform: rotate(25deg); }
-.light-ray:nth-child(3) { transform: rotate(18deg); }
-.light-ray:nth-child(4) { transform: rotate(22deg); }
+.depth-layer-2 {
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 150, 180, 0.15) 0%, transparent 40%);
+    z-index: 1;
+    animation: depth-shift 15s ease-in-out infinite;
+}
+
+.depth-layer-3 {
+    background: radial-gradient(ellipse at 70% 30%, rgba(0, 100, 150, 0.1) 0%, transparent 50%);
+    z-index: 1;
+    animation: depth-shift 20s ease-in-out infinite reverse;
+}
+
+@keyframes depth-shift {
+    0%, 100% { opacity: 0.5; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(20px); }
+}
+
+/* Light Rays from surface */
+.light-ray {
+    position: absolute;
+    top: -20%;
+    width: 2px;
+    height: 80%;
+    background: linear-gradient(to bottom,
+        rgba(150, 220, 255, 0.6) 0%,
+        rgba(100, 200, 255, 0.3) 20%,
+        rgba(50, 150, 200, 0.1) 50%,
+        transparent 80%
+    );
+    filter: blur(4px);
+    pointer-events: none;
+    z-index: 2;
+    animation: ray-shimmer 8s ease-in-out infinite;
+}
+
+.light-ray:nth-child(4) { width: 3px; animation-delay: 0s; transform: rotate(12deg); opacity: 0.7; }
+.light-ray:nth-child(5) { width: 2px; animation-delay: 1s; transform: rotate(8deg); opacity: 0.5; }
+.light-ray:nth-child(6) { width: 4px; animation-delay: 2s; transform: rotate(15deg); opacity: 0.8; }
+.light-ray:nth-child(7) { width: 2px; animation-delay: 3s; transform: rotate(10deg); opacity: 0.4; }
+.light-ray:nth-child(8) { width: 3px; animation-delay: 4s; transform: rotate(18deg); opacity: 0.6; }
+.light-ray:nth-child(9) { width: 2px; animation-delay: 5s; transform: rotate(6deg); opacity: 0.3; }
+
+@keyframes ray-shimmer {
+    0%, 100% { opacity: 0.3; filter: blur(4px); }
+    50% { opacity: 0.8; filter: blur(6px); }
+}
 
 /* Caustics Effect */
 .hero-caustics {
@@ -222,35 +272,92 @@ h1, h2 {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 50%;
     background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.05;
+    opacity: 0.03;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
 .hero-caustics-overlay {
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: -30%;
+    left: -30%;
+    width: 160%;
+    height: 100%;
     background-image:
-        radial-gradient(circle at 50% 50%, transparent 30%, rgba(79, 249, 255, 0.15) 60%, transparent 70%),
-        radial-gradient(circle at 30% 40%, transparent 20%, rgba(79, 249, 255, 0.1) 50%, transparent 60%),
-        radial-gradient(circle at 70% 60%, transparent 25%, rgba(79, 249, 255, 0.12) 55%, transparent 65%);
-    background-size: 400px 400px, 300px 300px, 350px 350px;
-    filter: blur(60px);
-    mix-blend-mode: color-dodge;
-    animation: caustic-float 20s infinite linear;
-    opacity: 0.4;
+        radial-gradient(circle at 50% 30%, transparent 20%, rgba(79, 249, 255, 0.08) 40%, transparent 60%),
+        radial-gradient(circle at 30% 20%, transparent 10%, rgba(100, 200, 255, 0.06) 30%, transparent 50%),
+        radial-gradient(circle at 70% 40%, transparent 15%, rgba(50, 180, 220, 0.05) 35%, transparent 55%);
+    background-size: 500px 500px, 400px 400px, 450px 450px;
+    filter: blur(40px);
+    mix-blend-mode: screen;
+    animation: caustic-float 25s infinite linear;
+    opacity: 0.6;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
 @keyframes caustic-float {
-    from { transform: rotate(0deg) scale(1); }
-    to { transform: rotate(360deg) scale(1.2); }
+    from { transform: rotate(0deg) translateY(0); }
+    to { transform: rotate(360deg) translateY(-20px); }
+}
+
+/* Underwater Fog */
+.underwater-fog {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(to top,
+        rgba(0, 5, 15, 0.9) 0%,
+        rgba(0, 10, 20, 0.5) 30%,
+        rgba(0, 20, 40, 0.2) 60%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Plankton Container */
+.plankton-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+    overflow: hidden;
+}
+
+/* Plankton Particles */
+.plankton {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(150, 220, 255, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: plankton-drift linear infinite;
+}
+
+@keyframes plankton-drift {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(var(--drift-x, 50px), var(--drift-y, -100px)) scale(0.5);
+        opacity: 0;
+    }
 }
 
 /* Bubble Container */
@@ -261,35 +368,120 @@ h1, h2 {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 2;
+    z-index: 5;
     overflow: hidden;
 }
 
-/* Floating Bubbles */
+/* Floating Bubbles - Improved */
 .bubble {
     position: absolute;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(79, 249, 255, 0.1));
+    background: radial-gradient(circle at 30% 30%,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(200, 240, 255, 0.4) 30%,
+        rgba(100, 200, 255, 0.2) 60%,
+        transparent 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     pointer-events: none;
-    filter: blur(1px);
+    box-shadow:
+        inset -2px -2px 4px rgba(255, 255, 255, 0.2),
+        0 0 8px rgba(100, 200, 255, 0.3);
     animation: bubble-rise linear infinite;
+}
+
+.bubble::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 30%;
+    height: 20%;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    filter: blur(1px);
 }
 
 @keyframes bubble-rise {
     0% {
-        transform: translateY(100vh) scale(0);
+        transform: translateY(100vh) translateX(0) scale(0.3);
         opacity: 0;
     }
     10% {
-        opacity: 0.6;
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(50vh) translateX(20px) scale(1);
     }
     90% {
-        opacity: 0.4;
+        opacity: 0.5;
     }
     100% {
-        transform: translateY(-20vh) scale(1.5);
+        transform: translateY(-10vh) translateX(-10px) scale(1.2);
         opacity: 0;
     }
+}
+
+/* Bioluminescence Container */
+.biolum-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+    overflow: hidden;
+}
+
+/* Bioluminescent Spots */
+.biolum {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: biolum-pulse ease-in-out infinite;
+}
+
+.biolum-cyan {
+    background: radial-gradient(circle, rgba(0, 255, 200, 0.8) 0%, rgba(0, 200, 255, 0.3) 40%, transparent 70%);
+    box-shadow: 0 0 20px rgba(0, 255, 200, 0.5), 0 0 40px rgba(0, 200, 255, 0.3);
+}
+
+.biolum-blue {
+    background: radial-gradient(circle, rgba(100, 150, 255, 0.7) 0%, rgba(50, 100, 200, 0.3) 40%, transparent 70%);
+    box-shadow: 0 0 15px rgba(100, 150, 255, 0.4), 0 0 30px rgba(50, 100, 200, 0.2);
+}
+
+.biolum-green {
+    background: radial-gradient(circle, rgba(0, 255, 150, 0.6) 0%, rgba(0, 200, 100, 0.2) 40%, transparent 70%);
+    box-shadow: 0 0 15px rgba(0, 255, 150, 0.3), 0 0 25px rgba(0, 200, 100, 0.2);
+}
+
+@keyframes biolum-pulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+}
+
+/* Abyss Bottom Darkness */
+.abyss-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 2, 5, 0.7) 40%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 6;
 }
 
 /* Distorted Content Container */
