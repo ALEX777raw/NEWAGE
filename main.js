@@ -183,8 +183,11 @@ function initRisoText() {
         text.split('').forEach((char, i) => {
             const charSpan = document.createElement('span');
             charSpan.className = 'char';
-            charSpan.textContent = char === ' ' ? '\u00A0' : char;
-            const delay = (i * 0.06) + (Math.random() * 0.15);
+            const displayChar = char === ' ' ? '\u00A0' : char;
+            charSpan.textContent = displayChar;
+            charSpan.setAttribute('data-char', displayChar); // For shimmer effect
+            // Staggered delay with liquid-like timing
+            const delay = (i * 0.08) + (Math.sin(i * 0.5) * 0.1);
             charSpan.style.animationDelay = `${delay}s`;
             textEl.appendChild(charSpan);
         });
@@ -202,15 +205,17 @@ function updateRiso() {
     const activeIndex = Math.min(Math.floor(scrollProgress * 4.2), 3);
 
     if (activeIndex !== risoState && containerTop > 0 && scrollProgress < 1) {
+        // Subtle liquid glass flash - white/blue tint
         flashLayer.animate([
-            { opacity: 0 },
-            { opacity: 0.8 },
-            { opacity: 0 }
-        ], { duration: 200 });
+            { opacity: 0, filter: 'blur(0px)' },
+            { opacity: 0.15, filter: 'blur(20px)' },
+            { opacity: 0, filter: 'blur(0px)' }
+        ], { duration: 400, easing: 'ease-out' });
 
         risoTexts.forEach((text, i) => {
             if (i !== activeIndex) {
                 text.classList.remove('active');
+                text.classList.remove('shown');
                 text.querySelectorAll('.char').forEach(char => {
                     char.style.animation = 'none';
                     char.offsetHeight;
@@ -220,6 +225,12 @@ function updateRiso() {
         });
 
         risoTexts[activeIndex].classList.add('active');
+        // Add 'shown' class after animation completes for idle wobble
+        setTimeout(() => {
+            if (risoTexts[activeIndex].classList.contains('active')) {
+                risoTexts[activeIndex].classList.add('shown');
+            }
+        }, 1500);
         risoState = activeIndex;
     }
 }
@@ -636,3 +647,101 @@ createBubbles();
 createPlankton();
 createBioluminescence();
 initAbyssalParallax();
+
+// ====== BACK TO TOP BUTTON WITH TRANSITION ======
+
+(function() {
+    const backToTopWrapper = document.getElementById('back-to-top-wrapper');
+    const backToTopBtn = document.getElementById('back-to-top');
+    const transitionOverlay = document.getElementById('transition-overlay');
+    const transitionParticles = document.getElementById('transition-particles');
+    const heroSection = document.getElementById('section-hero');
+
+    if (!backToTopWrapper || !backToTopBtn || !transitionOverlay) return;
+
+    // Show/hide button based on scroll position
+    let lastScrollTop = 0;
+    const showThreshold = window.innerHeight * 1.5;
+
+    function checkScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > showThreshold) {
+            backToTopWrapper.classList.add('visible');
+        } else {
+            backToTopWrapper.classList.remove('visible');
+        }
+
+        lastScrollTop = scrollTop;
+    }
+
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+
+    // Create transition particles
+    function createTransitionParticles() {
+        transitionParticles.innerHTML = '';
+        const particleCount = window.innerWidth < 768 ? 30 : 60;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'transition-particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 0.8}s`;
+            particle.style.width = `${Math.random() * 6 + 2}px`;
+            particle.style.height = particle.style.width;
+            transitionParticles.appendChild(particle);
+        }
+    }
+
+    // Smooth scroll with beautiful transition
+    function smoothScrollToTop() {
+        // Create particles
+        createTransitionParticles();
+
+        // Activate overlay
+        transitionOverlay.style.opacity = '1';
+        transitionOverlay.classList.add('active');
+
+        // Wait for waves to rise, then scroll
+        setTimeout(() => {
+            // Smooth scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'instant'
+            });
+
+            // Start fade out after scroll
+            setTimeout(() => {
+                transitionOverlay.style.transition = 'opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1)';
+                transitionOverlay.style.opacity = '0';
+
+                setTimeout(() => {
+                    transitionOverlay.classList.remove('active');
+                    transitionOverlay.style.transition = '';
+                    // Reset waves
+                    const waves = transitionOverlay.querySelectorAll('.transition-wave');
+                    waves.forEach(wave => {
+                        wave.style.animation = 'none';
+                        wave.offsetHeight; // Trigger reflow
+                        wave.style.animation = '';
+                    });
+                }, 800);
+            }, 400);
+        }, 1200);
+    }
+
+    // Button click handler
+    backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        smoothScrollToTop();
+    });
+
+    // Keyboard accessibility
+    backToTopBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            smoothScrollToTop();
+        }
+    });
+})();

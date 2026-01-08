@@ -333,6 +333,202 @@
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
+    // ============ 3D TEXT WITH UNDERWATER DISTORTION ============
+
+    // Create main title texture
+    const createTextTexture = (text, fontSize, fontWeight, glowColor) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 2048;
+        canvas.height = 512;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = `${fontWeight} ${fontSize}px "Inter", "Arial Black", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Multiple glow layers
+        for (let i = 0; i < 15; i++) {
+            ctx.shadowColor = glowColor;
+            ctx.shadowBlur = 30 + i * 4;
+            ctx.fillStyle = 'rgba(0,0,0,0)';
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+        }
+
+        // Main text gradient
+        const gradient = ctx.createLinearGradient(0, canvas.height * 0.3, 0, canvas.height * 0.7);
+        gradient.addColorStop(0, '#a0ffff');
+        gradient.addColorStop(0.3, '#60e8e8');
+        gradient.addColorStop(0.5, '#40d0d0');
+        gradient.addColorStop(0.7, '#30b8b8');
+        gradient.addColorStop(1, '#208888');
+
+        ctx.shadowColor = glowColor;
+        ctx.shadowBlur = 30;
+        ctx.fillStyle = gradient;
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+        // Inner highlight
+        ctx.shadowBlur = 0;
+        ctx.globalCompositeOperation = 'source-atop';
+        const highlightGradient = ctx.createLinearGradient(0, canvas.height * 0.2, 0, canvas.height * 0.5);
+        highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+        highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = highlightGradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        return texture;
+    };
+
+    // Create subtitle texture
+    const createSubtitleTexture = (text, fontSize) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 2048;
+        canvas.height = 128;
+
+        ctx.font = `400 ${fontSize}px "JetBrains Mono", "Helvetica Neue", Arial, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.shadowColor = 'rgba(0, 180, 200, 0.6)';
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = 'rgba(120, 200, 210, 0.9)';
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        return texture;
+    };
+
+    // Text vertex shader with underwater wave distortion
+    const textVertexShader = `
+        uniform float uTime;
+        varying vec2 vUv;
+        varying float vDistortion;
+
+        void main() {
+            vUv = uv;
+
+            vec3 pos = position;
+
+            // Underwater wave distortion
+            float wave1 = sin(pos.x * 0.5 + uTime * 0.8) * 0.12;
+            float wave2 = sin(pos.x * 0.3 - uTime * 0.5) * 0.08;
+            float wave3 = cos(pos.y * 0.8 + uTime * 0.6) * 0.06;
+
+            pos.y += wave1 + wave2;
+            pos.x += wave3;
+            pos.z += sin(pos.x * 0.2 + uTime * 0.4) * 0.2;
+
+            vDistortion = wave1 + wave2;
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+    `;
+
+    // Text fragment shader with refraction
+    const textFragmentShader = `
+        uniform sampler2D uTexture;
+        uniform float uTime;
+        uniform float uOpacity;
+        varying vec2 vUv;
+        varying float vDistortion;
+
+        void main() {
+            // UV distortion for underwater refraction
+            vec2 uv = vUv;
+            uv.x += sin(vUv.y * 10.0 + uTime) * 0.003;
+            uv.y += cos(vUv.x * 8.0 + uTime * 0.8) * 0.002;
+
+            vec4 texColor = texture2D(uTexture, uv);
+
+            // Color shift based on distortion
+            texColor.rgb += vec3(0.0, 0.05, 0.08) * abs(vDistortion);
+
+            texColor.a *= uOpacity;
+
+            gl_FragColor = texColor;
+        }
+    `;
+
+    // Main title
+    const titleTexture = createTextTexture('SEYATEL', 220, '900', 'rgba(0, 200, 200, 0.8)');
+    const titleGeometry = new THREE.PlaneGeometry(32, 8, 32, 8);
+    const titleMaterial = new THREE.ShaderMaterial({
+        vertexShader: textVertexShader,
+        fragmentShader: textFragmentShader,
+        uniforms: {
+            uTexture: { value: titleTexture },
+            uTime: { value: 0 },
+            uOpacity: { value: 1.0 }
+        },
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthWrite: false
+    });
+    const titleMesh = new THREE.Mesh(titleGeometry, titleMaterial);
+    titleMesh.position.set(0, 0, 0);
+    scene.add(titleMesh);
+
+    // Top subtitle
+    const topSubTexture = createSubtitleTexture('КРЕАТИВНЫЙ РАЗРАБОТЧИК', 48);
+    const topSubGeometry = new THREE.PlaneGeometry(24, 1.5, 16, 4);
+    const topSubMaterial = new THREE.ShaderMaterial({
+        vertexShader: textVertexShader,
+        fragmentShader: textFragmentShader,
+        uniforms: {
+            uTexture: { value: topSubTexture },
+            uTime: { value: 0 },
+            uOpacity: { value: 0.9 }
+        },
+        transparent: true,
+        depthWrite: false
+    });
+    const topSubMesh = new THREE.Mesh(topSubGeometry, topSubMaterial);
+    topSubMesh.position.set(0, 5.5, 0);
+    scene.add(topSubMesh);
+
+    // Bottom subtitle 1
+    const bottomSub1Texture = createSubtitleTexture('Цифровой ремесленник на границе кода и искусства.', 36);
+    const bottomSub1Geometry = new THREE.PlaneGeometry(28, 1.2, 16, 4);
+    const bottomSub1Material = new THREE.ShaderMaterial({
+        vertexShader: textVertexShader,
+        fragmentShader: textFragmentShader,
+        uniforms: {
+            uTexture: { value: bottomSub1Texture },
+            uTime: { value: 0 },
+            uOpacity: { value: 0.7 }
+        },
+        transparent: true,
+        depthWrite: false
+    });
+    const bottomSub1Mesh = new THREE.Mesh(bottomSub1Geometry, bottomSub1Material);
+    bottomSub1Mesh.position.set(0, -5, 0);
+    scene.add(bottomSub1Mesh);
+
+    // Bottom subtitle 2
+    const bottomSub2Texture = createSubtitleTexture('Создаю текучие визуальные опыты.', 36);
+    const bottomSub2Geometry = new THREE.PlaneGeometry(22, 1.2, 16, 4);
+    const bottomSub2Material = new THREE.ShaderMaterial({
+        vertexShader: textVertexShader,
+        fragmentShader: textFragmentShader,
+        uniforms: {
+            uTexture: { value: bottomSub2Texture },
+            uTime: { value: 0 },
+            uOpacity: { value: 0.7 }
+        },
+        transparent: true,
+        depthWrite: false
+    });
+    const bottomSub2Mesh = new THREE.Mesh(bottomSub2Geometry, bottomSub2Material);
+    bottomSub2Mesh.position.set(0, -6.8, 0);
+    scene.add(bottomSub2Mesh);
+
     // ============ ANIMATION ============
     const clock = new THREE.Clock();
     let animationId;
@@ -369,6 +565,12 @@
             }
         }
         particleGeometry.attributes.position.needsUpdate = true;
+
+        // Update text
+        titleMaterial.uniforms.uTime.value = time;
+        topSubMaterial.uniforms.uTime.value = time;
+        bottomSub1Material.uniforms.uTime.value = time;
+        bottomSub2Material.uniforms.uTime.value = time;
 
         // Camera movement
         camera.position.x = mouse.x * 2;

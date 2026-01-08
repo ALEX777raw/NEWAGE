@@ -659,12 +659,34 @@
                     }
                 }
 
-                rocket.position.set(rocketX, rocketY, rocketZ);
+                // Get time for animation
+                const time = clock.getElapsedTime();
 
-                // Rocket pointing down
-                rocket.rotation.x = Math.PI * 0.92;
-                rocket.rotation.y = 0;
-                rocket.rotation.z = 0;
+                // Dynamic flying animation - rocket wobbles and sways
+                const wobbleIntensity = 0.8 + shakeIntensity * 0.5;
+
+                // Position oscillation - subtle bobbing and swaying
+                const bobX = Math.sin(time * 2.5) * 0.8 * wobbleIntensity;
+                const bobY = Math.sin(time * 3.2) * 0.5 * wobbleIntensity;
+                const bobZ = Math.cos(time * 2.8) * 0.6 * wobbleIntensity;
+
+                rocket.position.set(
+                    rocketX + bobX,
+                    rocketY + bobY,
+                    rocketZ + bobZ
+                );
+
+                // Rocket rotation - pointing down with dynamic wobble
+                const wobbleRotX = Math.sin(time * 2.0) * 0.04 * wobbleIntensity;
+                const wobbleRotY = Math.cos(time * 1.8) * 0.05 * wobbleIntensity;
+                const wobbleRotZ = Math.sin(time * 2.3) * 0.03 * wobbleIntensity;
+
+                // Banking effect - tilt towards movement direction
+                const bankAngle = Math.sin(time * 1.5) * 0.08;
+
+                rocket.rotation.x = Math.PI * 0.92 + wobbleRotX;
+                rocket.rotation.y = wobbleRotY + bankAngle;
+                rocket.rotation.z = wobbleRotZ;
 
                 // Update words
                 updateFlyingWords(rocketProgress);
@@ -845,32 +867,38 @@
     function createRocketFire() {
         if (!rocket || !rocket.visible) return;
 
+        const time = clock.getElapsedTime();
+
         // Fire comes from bottom of rocket (opposite to direction of travel)
         const rocketPos = rocket.position.clone();
+
+        // Engine thrust pulsation - makes fire look alive
+        const thrustPulse = 0.7 + Math.sin(time * 15) * 0.15 + Math.sin(time * 23) * 0.1 + Math.random() * 0.15;
 
         // Create fire particles (reduced on mobile for performance)
         const baseCount = isMobile ? 3 : 8;
         const particleCount = baseCount + Math.floor(shakeIntensity * (isMobile ? 2 : 5));
 
         for (let i = 0; i < particleCount; i++) {
-            // Main engine fire - concentrated
+            // Main engine fire - concentrated with pulsating spread
+            const pulseSpread = 1 + thrustPulse * 0.5;
             const offset = new THREE.Vector3(
-                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3 * pulseSpread,
                 10 + Math.random() * 5, // Behind rocket (it's going down)
-                (Math.random() - 0.5) * 3
+                (Math.random() - 0.5) * 3 * pulseSpread
             );
 
-            // Fire shoots upward with spread based on intensity
-            const spread = 0.5 + shakeIntensity * 0.5;
+            // Fire shoots upward with spread based on intensity and pulse
+            const spread = (0.5 + shakeIntensity * 0.5) * thrustPulse;
             const velocity = new THREE.Vector3(
                 (Math.random() - 0.5) * spread,
-                Math.random() * 3 + 2 + shakeIntensity * 2, // Faster fire at higher speed
+                (Math.random() * 3 + 2 + shakeIntensity * 2) * thrustPulse, // Faster fire at higher speed
                 (Math.random() - 0.5) * spread
             );
 
             const particle = new RocketFireParticle(rocketPos.clone().add(offset), velocity);
-            // Make particles bigger based on intensity
-            particle.size = (Math.random() * 4 + 3) * (1 + shakeIntensity * 0.5);
+            // Make particles bigger based on intensity and pulse
+            particle.size = (Math.random() * 4 + 3) * (1 + shakeIntensity * 0.5) * thrustPulse;
             particle.sprite.scale.setScalar(particle.size);
             rocketFireParticles.push(particle);
             scene.add(particle.sprite);
@@ -879,23 +907,23 @@
         // Add some extra bright core particles (reduced on mobile)
         const coreCount = isMobile ? 1 : 3;
         for (let i = 0; i < coreCount; i++) {
-            const offset = new THREE.Vector3(
-                (Math.random() - 0.5) * 1,
+            const coreOffset = new THREE.Vector3(
+                (Math.random() - 0.5) * 1.5 * thrustPulse,
                 8,
-                (Math.random() - 0.5) * 1
+                (Math.random() - 0.5) * 1.5 * thrustPulse
             );
-            const velocity = new THREE.Vector3(
-                (Math.random() - 0.5) * 0.2,
-                Math.random() * 2 + 1,
-                (Math.random() - 0.5) * 0.2
+            const coreVelocity = new THREE.Vector3(
+                (Math.random() - 0.5) * 0.3 * thrustPulse,
+                (Math.random() * 2 + 1.5) * thrustPulse,
+                (Math.random() - 0.5) * 0.3 * thrustPulse
             );
 
-            const particle = new RocketFireParticle(rocketPos.clone().add(offset), velocity);
-            particle.size = Math.random() * 6 + 4; // Bigger core particles
-            particle.sprite.scale.setScalar(particle.size);
-            particle.sprite.material.color.setRGB(1, 1, 1); // White hot core
-            rocketFireParticles.push(particle);
-            scene.add(particle.sprite);
+            const coreParticle = new RocketFireParticle(rocketPos.clone().add(coreOffset), coreVelocity);
+            coreParticle.size = (Math.random() * 6 + 4) * thrustPulse; // Pulsating core
+            coreParticle.sprite.scale.setScalar(coreParticle.size);
+            coreParticle.sprite.material.color.setRGB(1, 1, 0.95); // White hot core
+            rocketFireParticles.push(coreParticle);
+            scene.add(coreParticle.sprite);
         }
 
         // Create smoke trail - less frequent than fire, but longer lasting (reduced on mobile)
