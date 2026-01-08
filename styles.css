@@ -602,61 +602,62 @@ h1, h2 {
     }
 }
 
-/* Portfolio overlaps hero from above - Liquid Glass Effect */
+/* ====== LIQUID GLASS PORTFOLIO ====== */
+
+/* Bead Wrapper - outer glow frame */
 .portfolio-container {
     position: relative;
     z-index: 10;
-    margin-top: -80px;
+    margin-top: -60px;
+    padding: 4px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.4));
+    border-radius: 60px 60px 0 0;
+    box-shadow: 0 -30px 60px rgba(0,0,0,0.6);
 }
 
-/* Spline Liquid Glass Background */
-.spline-glass-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    pointer-events: none;
-    border: none;
-    border-radius: 50px 50px 0 0;
-}
-
+/* Main Liquid Glass Panel */
 .portfolio-sticky {
-    border-radius: 50px 50px 0 0;
-    background: rgba(10, 12, 18, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    border-radius: 56px 56px 0 0;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     box-shadow:
-        0 -30px 80px rgba(0, 0, 0, 0.5),
-        inset 0 1px 1px rgba(255, 255, 255, 0.2),
-        inset 0 -1px 1px rgba(0, 0, 0, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+        inset 0 2px 4px rgba(255,255,255,0.15),
+        inset 0 -20px 40px rgba(0,0,0,0.3),
+        0 10px 40px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
+    animation: liquid-edge-flow 4s infinite ease-in-out;
 }
 
-/* Glass highlight effect */
+/* Edge tension animation */
+@keyframes liquid-edge-flow {
+    0%, 100% { border-color: rgba(255,255,255,0.1); }
+    50% { border-color: rgba(255,255,255,0.25); }
+}
+
+/* Specular Highlight - top shine */
 .portfolio-sticky::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
+    left: 10%;
+    width: 50%;
+    height: 150px;
     background: linear-gradient(180deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.05) 30%,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.08) 40%,
         transparent 100%
     );
+    border-radius: 0 0 100% 100%;
+    filter: blur(20px);
     pointer-events: none;
-    border-radius: 50px 50px 0 0;
     z-index: 1;
+    transform: rotate(-3deg);
 }
 
-/* Glass refraction shimmer */
+/* Caustic Light Effect */
 .portfolio-sticky::after {
     content: '';
     position: absolute;
@@ -664,22 +665,50 @@ h1, h2 {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.03) 45%,
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0.03) 55%,
-        transparent 60%
+    background: radial-gradient(
+        circle at var(--caustic-x, 30%) var(--caustic-y, 20%),
+        rgba(144, 224, 255, 0.15) 0%,
+        transparent 25%,
+        rgba(255, 100, 250, 0.08) 50%,
+        transparent 70%
     );
-    animation: glass-shimmer 8s ease-in-out infinite;
+    mix-blend-mode: overlay;
     pointer-events: none;
     z-index: 2;
+    animation: caustic-drift 12s ease-in-out infinite;
 }
 
-@keyframes glass-shimmer {
-    0%, 100% { transform: translateX(-30%) translateY(-30%) rotate(0deg); }
-    50% { transform: translateX(30%) translateY(30%) rotate(5deg); }
+@keyframes caustic-drift {
+    0%, 100% {
+        --caustic-x: 20%;
+        --caustic-y: 30%;
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        --caustic-x: 70%;
+        --caustic-y: 20%;
+        transform: translate(10%, -5%) scale(1.1);
+    }
+    66% {
+        --caustic-x: 40%;
+        --caustic-y: 60%;
+        transform: translate(-5%, 10%) scale(0.95);
+    }
+}
+
+/* Secondary specular - small bright spot */
+.liquid-specular {
+    position: absolute;
+    top: 30px;
+    left: 20%;
+    width: 120px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+    border-radius: 100%;
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: 3;
+    transform: rotate(-8deg);
 }
 
 .middle {
