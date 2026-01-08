@@ -511,37 +511,79 @@ function initBlueprintParallax() {
 
 initBlueprintParallax();
 
-// Chrome Text Interactive Effect
-function initChromeTextEffect() {
-    const chromeText = document.getElementById('chrome-hero-text');
-    const chromeDisplacement = document.getElementById('chrome-displacement');
-    const heroSection = document.getElementById('section-hero');
+// ====== ABYSSAL UI - Underwater Effects ======
 
-    if (!chromeText || !chromeDisplacement || !heroSection) return;
+// Create floating bubbles
+function createBubbles() {
+    const bubbleContainer = document.getElementById('heroBubbles');
+    if (!bubbleContainer) return;
+
+    const bubbleCount = window.innerWidth < 768 ? 20 : 40;
+
+    for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+
+        const size = Math.random() * 8 + 3;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.animationDuration = `${Math.random() * 12 + 6}s`;
+        bubble.style.animationDelay = `${Math.random() * 10}s`;
+
+        bubbleContainer.appendChild(bubble);
+    }
+}
+
+// Underwater parallax effect
+function initAbyssalParallax() {
+    const heroSection = document.getElementById('section-hero');
+    const distortContainer = document.getElementById('heroDistort');
+    const heroTitle = document.querySelector('.hero-title-abyssal');
+
+    if (!heroSection || !distortContainer) return;
 
     heroSection.addEventListener('mousemove', (e) => {
-        const rect = heroSection.getBoundingClientRect();
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+        const x = (window.innerWidth / 2 - e.clientX) / 40;
+        const y = (window.innerHeight / 2 - e.clientY) / 40;
 
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+        distortContainer.style.transform = `translate(${x}px, ${y}px)`;
 
-        const diffX = (mouseX - centerX) / centerX;
-        const diffY = (mouseY - centerY) / centerY;
-
-        // Dynamic displacement based on mouse position
-        const dynamicScale = 25 + (Math.abs(diffX) * 80);
-        chromeDisplacement.setAttribute('scale', dynamicScale);
-
-        // Subtle parallax and skew
-        chromeText.style.transform = `translate3d(${diffX * 15}px, ${diffY * 10}px, 0) skew(${diffX * 3}deg)`;
+        if (heroTitle) {
+            heroTitle.style.textShadow = `${x * -2}px ${y * -2}px 80px rgba(79, 249, 255, 0.5)`;
+        }
     });
 
     heroSection.addEventListener('mouseleave', () => {
-        chromeDisplacement.setAttribute('scale', '25');
-        chromeText.style.transform = 'translate3d(0, 0, 0) skew(0deg)';
+        distortContainer.style.transform = 'translate(0, 0)';
+        if (heroTitle) {
+            heroTitle.style.textShadow = '0 0 80px rgba(79, 249, 255, 0.5)';
+        }
     });
 }
 
-initChromeTextEffect();
+// Depth counter animation
+function initDepthCounter() {
+    const depthEl = document.getElementById('depth-val');
+    const pressureEl = document.getElementById('pressure-val');
+
+    if (!depthEl) return;
+
+    let depth = 10984;
+    let pressure = 15750;
+
+    setInterval(() => {
+        depth += (Math.random() * 4 - 2);
+        depthEl.innerText = `${depth.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} M`;
+
+        if (pressureEl) {
+            pressure += (Math.random() * 2 - 1);
+            pressureEl.innerText = `${pressure.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})} PSI`;
+        }
+    }, 150);
+}
+
+// Initialize all abyssal effects
+createBubbles();
+initAbyssalParallax();
+initDepthCounter();

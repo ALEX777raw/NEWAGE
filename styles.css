@@ -187,74 +187,220 @@ h1, h2 {
     padding-left: 8%;
     position: relative;
     overflow: hidden;
-    background: #0a0a0a;
 }
 
-/* Prismatic shader background */
-#prismatic-container {
+/* ====== ABYSSAL UI - Deep Sea Theme ====== */
+.hero.abyssal {
+    background: radial-gradient(circle at 50% -20%, #0c4a6e 0%, #000a12 80%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+/* Light Rays from surface */
+.light-ray {
+    position: absolute;
+    top: -10%;
+    width: 3px;
+    height: 120%;
+    background: linear-gradient(to bottom, rgba(179, 247, 255, 0.3), transparent 70%);
+    transform: rotate(20deg);
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.light-ray:nth-child(2) { transform: rotate(25deg); }
+.light-ray:nth-child(3) { transform: rotate(18deg); }
+.light-ray:nth-child(4) { transform: rotate(22deg); }
+
+/* Caustics Effect */
+.hero-caustics {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    opacity: 0.85;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 1;
 }
 
-.hero .content-block {
-    position: relative;
+.hero-caustics-overlay {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+        radial-gradient(circle at 50% 50%, transparent 30%, rgba(79, 249, 255, 0.15) 60%, transparent 70%),
+        radial-gradient(circle at 30% 40%, transparent 20%, rgba(79, 249, 255, 0.1) 50%, transparent 60%),
+        radial-gradient(circle at 70% 60%, transparent 25%, rgba(79, 249, 255, 0.12) 55%, transparent 65%);
+    background-size: 400px 400px, 300px 300px, 350px 350px;
+    filter: blur(60px);
+    mix-blend-mode: color-dodge;
+    animation: caustic-float 20s infinite linear;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes caustic-float {
+    from { transform: rotate(0deg) scale(1); }
+    to { transform: rotate(360deg) scale(1.2); }
+}
+
+/* Bubble Container */
+.bubble-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
     z-index: 2;
+    overflow: hidden;
 }
 
-.hero .floating-data {
-    z-index: 2;
-    color: rgba(255, 255, 255, 0.7);
+/* Floating Bubbles */
+.bubble {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(79, 249, 255, 0.1));
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(1px);
+    animation: bubble-rise linear infinite;
 }
 
-/* Chrome Text Effect */
-.chrome-text-wrapper {
-    position: relative;
-    display: inline-block;
-    filter: url(#fluid-chrome);
+@keyframes bubble-rise {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateY(-20vh) scale(1.5);
+        opacity: 0;
+    }
 }
 
-.chrome-text {
-    font-size: clamp(4rem, 15vw, 12rem);
+/* Distorted Content Container */
+.distort-container {
+    filter: url(#water-filter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Abyssal Typography */
+.hero-title-abyssal {
+    font-size: clamp(4rem, 15vw, 10rem);
     font-weight: 900;
-    line-height: 0.9;
     text-transform: uppercase;
-    background: linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #a1a1a1 45%,
-        #000000 50%,
-        #a1a1a1 55%,
-        #404040 100%
+    letter-spacing: -0.03em;
+    line-height: 0.85;
+    margin: 1.5rem 0;
+    background: linear-gradient(180deg,
+        #b3f7ff 0%,
+        #4ff9ff 30%,
+        rgba(79, 249, 255, 0.3) 70%,
+        rgba(255, 255, 255, 0.05) 100%
     );
-    background-size: 100% 200%;
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
-    transition: transform 0.3s ease-out;
-    user-select: none;
-    animation: flowChrome 8s linear infinite;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 80px rgba(79, 249, 255, 0.5);
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-@keyframes flowChrome {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 0% 200%; }
+.abyssal-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #4ff9ff !important;
+    opacity: 0.8;
 }
 
-.hero .label {
-    color: #00ffaa;
+.abyssal-desc {
+    color: rgba(179, 247, 255, 0.6) !important;
+    max-width: 500px;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
-.hero .description {
-    color: rgba(255, 255, 255, 0.6);
+/* Abyssal Data Grid */
+.abyssal-data-grid {
+    font-family: 'JetBrains Mono', monospace;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 3rem;
 }
 
-.hero .meta-val {
-    color: rgba(255, 255, 255, 0.8);
+.abyssal-data-item {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(79, 249, 255, 0.3);
+    padding-left: 1rem;
+}
+
+.abyssal-data-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #4ff9ff;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+.abyssal-data-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #e0f7fa;
+}
+
+/* Mobile Responsive for Abyssal */
+@media (max-width: 768px) {
+    .hero-title-abyssal {
+        font-size: clamp(3rem, 12vw, 6rem);
+    }
+
+    .abyssal-data-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .abyssal-data-item {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-left: none;
+        border-bottom: 1px solid rgba(79, 249, 255, 0.2);
+        padding: 0.5rem 0;
+    }
+
+    .light-ray {
+        opacity: 0.2 !important;
+    }
+
+    .hero-caustics-overlay {
+        animation: none;
+        opacity: 0.2;
+    }
 }
 
 /* Portfolio overlaps hero from above */

@@ -74,6 +74,14 @@
                 <feGaussianBlur in="high-contrast" stdDeviation="0.5" result="soft"/>
                 <feComposite in="high-contrast" in2="soft" operator="over"/>
             </filter>
+
+            <!-- Water Distortion Filter for Hero -->
+            <filter id="water-filter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="1">
+                    <animate attributeName="baseFrequency" dur="10s" values="0.015;0.02;0.015" repeatCount="indefinite" />
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" scale="20" />
+            </filter>
         </defs>
     </svg>
 
@@ -88,28 +96,42 @@
     <div class="scroll-hint">Скролль для навигации ↓</div>
 
     <main id="main">
-        <!-- HERO Section -->
-        <section class="hero" id="section-hero">
-            <div class="content-block float-anim" data-speed="0.1">
-                <span class="label">Креативный разработчик</span>
-                <div class="chrome-text-wrapper">
-                    <h1 class="chrome-text" id="chrome-hero-text">SEYATEL</h1>
-                </div>
-                <p class="description">Цифровой ремесленник на границе кода и искусства. Создаю текучие визуальные опыты.</p>
-            </div>
+        <!-- HERO Section - Abyssal UI -->
+        <section class="hero abyssal" id="section-hero">
+            <!-- Light Rays -->
+            <div class="light-ray" style="left: 15%; opacity: 0.4;"></div>
+            <div class="light-ray" style="left: 35%; opacity: 0.2;"></div>
+            <div class="light-ray" style="left: 60%; opacity: 0.5;"></div>
+            <div class="light-ray" style="left: 85%; opacity: 0.3;"></div>
 
-            <div class="floating-data">
-                <div class="meta-item">
-                    Состояние
-                    <span class="meta-val" id="state-val">СТАТИЧЕСКИЙ_БАЛАНС</span>
+            <!-- Caustics Layer -->
+            <div class="hero-caustics"></div>
+            <div class="hero-caustics-overlay"></div>
+
+            <!-- Bubble Container -->
+            <div class="bubble-container" id="heroBubbles"></div>
+
+            <!-- Distorted Content -->
+            <div class="distort-container" id="heroDistort">
+                <div class="content-block" data-speed="0.1">
+                    <span class="label abyssal-label">Креативный разработчик</span>
+                    <h1 class="hero-title-abyssal">SEYATEL</h1>
+                    <p class="description abyssal-desc">Цифровой ремесленник на границе кода и искусства. Создаю текучие визуальные опыты.</p>
                 </div>
-                <div class="meta-item">
-                    Скорость
-                    <span class="meta-val" id="velocity-val">0.00</span>
-                </div>
-                <div class="meta-item" style="color: var(--pulp-accent);">
-                    Позиция
-                    <span class="meta-val" id="coord-val">0.00 // 0.00</span>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <span class="data-label">Глубина</span>
+                        <span class="data-value" id="depth-val">10,984 M</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Давление</span>
+                        <span class="data-value" id="pressure-val">15,750 PSI</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Светимость</span>
+                        <span class="data-value">0.0004%</span>
+                    </div>
                 </div>
             </div>
         </section>
